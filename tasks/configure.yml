@@ -1,0 +1,23 @@
+- name: Check that the postgresql.conf exists
+  stat:
+    path: "/var/lib/pgsql/{{ postgresql_version }}/data/postgresql.conf"
+  register: result
+
+- name: "Stage 2: initialize new postgresql cluster"
+  become: yes
+  become_user: "{{ postgresql_admin_user }}"
+  command: "/usr/pgsql-{{ postgresql_version }}/bin/initdb -D /var/lib/pgsql/{{ postgresql_version }}/data"
+  when: result.stat.exists == False
+
+- name: "Stage 2: configure pg_hba.conf"
+  template:
+    src: pg_hba.conf.j2
+    dest: "/var/lib/pgsql/{{ postgresql_version }}/data/pg_hba.conf"
+    owner: "{{ postgresql_admin_user }}"
+    group: "{{ postgresql_admin_user }}"
+    mode: 0640
+  notify:
+    -  reload postgres
+
+- name: "Stage 2: start postgresql service"
+  service: name="postgresql-{{ postgresql_version }}" state=started enabled=yes

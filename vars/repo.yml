@@ -1,0 +1,3 @@
+postgresql_repo:
+  - { version: '10',  repo: 'https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_64/pgdg-centos10-10-2.noarch.rpm' }
+  - { version: '9.6', repo: 'https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm' }

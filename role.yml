@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  become: yes
+  vars_files:
+    - 'defaults/main.yml'
+    - 'vars/repo.yml'
+  tasks:
+    - include_tasks: 'tasks/main.yml'
+  handlers:
+  - name: reload postgres
+    service: name="postgresql-{{ postgresql_version}}.service" state=reloaded
+
